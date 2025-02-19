@@ -1,0 +1,48 @@
+<.header>
+  Listing Job applications
+  <:actions>
+    <.link patch={~p"/job_applications/new"}>
+      <.button>New Application</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="job_applications"
+  rows={@streams.job_applications}
+  row_click={fn {_id, application} -> JS.navigate(~p"/job_applications/#{application}") end}
+>
+  <:col :let={{_id, application}} label="Full name">{application.full_name}</:col>
+  <:col :let={{_id, application}} label="Dob">{application.dob}</:col>
+  <:col :let={{_id, application}} label="Phone">{application.phone}</:col>
+  <:col :let={{_id, application}} label="Email">{application.email}</:col>
+  <:col :let={{_id, application}} label="Position">{application.position}</:col>
+  <:col :let={{_id, application}} label="Experience">{application.experience}</:col>
+  <:col :let={{_id, application}} label="Availability">{application.availability}</:col>
+  <:col :let={{_id, application}} label="Background check">{application.background_check}</:col>
+  <:action :let={{_id, application}}>
+    <div class="sr-only">
+      <.link navigate={~p"/job_applications/#{application}"}>Show</.link>
+    </div>
+    <.link patch={~p"/job_applications/#{application}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, application}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: application.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="application-modal" show on_cancel={JS.patch(~p"/job_applications")}>
+  <.live_component
+    module={JobApplicationWeb.ApplicationLive.FormComponent}
+    id={@application.id || :new}
+    title={@page_title}
+    action={@live_action}
+    application={@application}
+    patch={~p"/job_applications"}
+  />
+</.modal>

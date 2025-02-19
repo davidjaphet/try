@@ -1,0 +1,48 @@
+<.header>
+  Listing Job applications
+  <:actions>
+    <.link patch={~p"/job_applications/new"}>
+      <.button>New Job application entry</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="job_applications"
+  rows={@streams.job_applications}
+  row_click={fn {_id, job_application_entry} -> JS.navigate(~p"/job_applications/#{job_application_entry}") end}
+>
+  <:col :let={{_id, job_application_entry}} label="Full name">{job_application_entry.full_name}</:col>
+  <:col :let={{_id, job_application_entry}} label="Dob">{job_application_entry.dob}</:col>
+  <:col :let={{_id, job_application_entry}} label="Phone">{job_application_entry.phone}</:col>
+  <:col :let={{_id, job_application_entry}} label="Email">{job_application_entry.email}</:col>
+  <:col :let={{_id, job_application_entry}} label="Position">{job_application_entry.position}</:col>
+  <:col :let={{_id, job_application_entry}} label="Experience">{job_application_entry.experience}</:col>
+  <:col :let={{_id, job_application_entry}} label="Availability">{job_application_entry.availability}</:col>
+  <:col :let={{_id, job_application_entry}} label="Background check">{job_application_entry.background_check}</:col>
+  <:action :let={{_id, job_application_entry}}>
+    <div class="sr-only">
+      <.link navigate={~p"/job_applications/#{job_application_entry}"}>Show</.link>
+    </div>
+    <.link patch={~p"/job_applications/#{job_application_entry}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, job_application_entry}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: job_application_entry.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="job_application_entry-modal" show on_cancel={JS.patch(~p"/job_applications")}>
+  <.live_component
+    module={JobApplicationWeb.JobApplicationEntryLive.FormComponent}
+    id={@job_application_entry.id || :new}
+    title={@page_title}
+    action={@live_action}
+    job_application_entry={@job_application_entry}
+    patch={~p"/job_applications"}
+  />
+</.modal>

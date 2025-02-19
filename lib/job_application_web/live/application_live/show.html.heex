@@ -1,0 +1,33 @@
+<.header>
+  Application {@application.id}
+  <:subtitle>This is a application record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/job_applications/#{@application}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit application</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Full name">{@application.full_name}</:item>
+  <:item title="Dob">{@application.dob}</:item>
+  <:item title="Phone">{@application.phone}</:item>
+  <:item title="Email">{@application.email}</:item>
+  <:item title="Position">{@application.position}</:item>
+  <:item title="Experience">{@application.experience}</:item>
+  <:item title="Availability">{@application.availability}</:item>
+  <:item title="Background check">{@application.background_check}</:item>
+</.list>
+
+<.back navigate={~p"/job_applications"}>Back to job_applications</.back>
+
+<.modal :if={@live_action == :edit} id="application-modal" show on_cancel={JS.patch(~p"/job_applications/#{@application}")}>
+  <.live_component
+    module={JobApplicationWeb.ApplicationLive.FormComponent}
+    id={@application.id}
+    title={@page_title}
+    action={@live_action}
+    application={@application}
+    patch={~p"/job_applications/#{@application}"}
+  />
+</.modal>

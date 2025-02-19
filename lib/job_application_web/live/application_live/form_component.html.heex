@@ -1,0 +1,30 @@
+<.form let={f} for={@changeset} phx-change="validate" phx-submit="save">
+  <.input field={f[:full_name]} label="Full Name" type="text" required />
+  <.input field={f[:dob]} label="Date of Birth" type="date" required />
+  <.input field={f[:phone]} label="Phone Number" type="text" required />
+  <.input field={f[:email]} label="Email Address" type="email" required />
+  
+  <label>Position Applied For:</label>
+  <select name="job_application[position]" phx-change="validate">
+    <option value="residential">Residential Cleaning</option>
+    <option value="commercial">Commercial Cleaning</option>
+    <option value="other">Other</option>
+  </select>
+
+  <.input field={f[:experience]} label="Work Experience" type="textarea" />
+
+  <label>Availability:</label>
+  <.checkbox field={f[:availability]} value="Monday" label="Monday" />
+  <.checkbox field={f[:availability]} value="Tuesday" label="Tuesday" />
+  <.checkbox field={f[:availability]} value="Wednesday" label="Wednesday" />
+  <.checkbox field={f[:availability]} value="Thursday" label="Thursday" />
+  <.checkbox field={f[:availability]} value="Friday" label="Friday" />
+  <.checkbox field={f[:availability]} value="Saturday" label="Saturday" />
+  <.checkbox field={f[:availability]} value="Sunday" label="Sunday" />
+
+  <label>Do you consent to a background check?</label>
+  <.radio field={f[:background_check]} value="true" label="Yes" />
+  <.radio field={f[:background_check]} value="false" label="No" />
+
+  <button type="submit">Submit Application</button>
+</.form>
